@@ -1,0 +1,21 @@
+<component name="libraryTable">
+  <library name="Gradle: androidx.room:room-ktx:2.3.0@aar">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../../../../../../Gradle/gradle-7.2/caches/transforms-3/6efb3b2bf01277280f3b373f40f68bff/transformed/room-ktx-2.3.0/jars/classes.jar!/" />
+      <root url="file://$PROJECT_DIR$/../../../../../../Gradle/gradle-7.2/caches/transforms-3/6efb3b2bf01277280f3b373f40f68bff/transformed/room-ktx-2.3.0/AndroidManifest.xml" />
+      <root url="file://$PROJECT_DIR$/../../../../../../Gradle/gradle-7.2/caches/transforms-3/6efb3b2bf01277280f3b373f40f68bff/transformed/room-ktx-2.3.0/res" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/6efb3b2bf01277280f3b373f40f68bff/transformed/room-ktx-2.3.0/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/6efb3b2bf01277280f3b373f40f68bff/transformed/room-ktx-2.3.0/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/6efb3b2bf01277280f3b373f40f68bff/transformed/room-ktx-2.3.0/AndroidManifest.xml" />
+      <root url="jar://C:/Gradle/gradle-7.2/caches/transforms-3/6efb3b2bf01277280f3b373f40f68bff/transformed/room-ktx-2.3.0/jars/classes.jar!/" />
+      <root url="file://C:/Gradle/gradle-7.2/caches/transforms-3/6efb3b2bf01277280f3b373f40f68bff/transformed/room-ktx-2.3.0/AndroidManifest.xml" />
+      <root url="file://C:/Gradle/gradle-7.2/caches/transforms-3/6efb3b2bf01277280f3b373f40f68bff/transformed/room-ktx-2.3.0/res" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/../../../../../../Gradle/gradle-7.2/caches/modules-2/files-2.1/androidx.room/room-ktx/2.3.0/f8b846b2835c246c1a1181674e9f44e6d6485913/room-ktx-2.3.0-sources.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/androidx.room/room-ktx/2.3.0/f8b846b2835c246c1a1181674e9f44e6d6485913/room-ktx-2.3.0-sources.jar!/" />
+      <root url="jar://C:/Gradle/gradle-7.2/caches/modules-2/files-2.1/androidx.room/room-ktx/2.3.0/f8b846b2835c246c1a1181674e9f44e6d6485913/room-ktx-2.3.0-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
