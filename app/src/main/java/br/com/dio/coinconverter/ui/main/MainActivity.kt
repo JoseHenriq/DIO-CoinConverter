@@ -78,7 +78,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun bindListeners() {
 
-        binding.tilValue.editText?.doAfterTextChanged {
+        binding.tilValueIn.editText?.doAfterTextChanged {
 
             binding.btnConverter.isEnabled = it != null && it.toString().isNotEmpty()
             binding.btnSave.isEnabled = false
@@ -99,7 +99,7 @@ class MainActivity : AppCompatActivity() {
 
             val value = viewModel.state.value
             (value as? MainViewModel.State.Success)?.let {
-                val exchange = it.exchange.copy(bid = it.exchange.bid * binding.tilValue.text.toDouble())
+                val exchange = it.exchange.copy(bid = it.exchange.bid * binding.tilValueIn.text.toDouble())
                 viewModel.saveExchange(exchange)
 
             }
@@ -135,7 +135,7 @@ class MainActivity : AppCompatActivity() {
         val selectedCoin = binding.tilTo.text
         val coin = Coin.getByName(selectedCoin)
 
-        val result = it.exchange.bid * binding.tilValue.text.toDouble()
+        val result = it.exchange.bid * binding.tilValueIn.text.toDouble()
 
         binding.tvResult.text = result.formatCurrency(coin.locale)
 

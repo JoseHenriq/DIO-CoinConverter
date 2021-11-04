@@ -235,5 +235,10 @@ import kotlinx.coroutines.flow.Flow
 
 <h3><u>2.1- Rodando o app</u></h2>(--> OK!)
 
-<h3><u>2.2- Entendendo a implementação</u></h2>
 
+
+
+04/11/21 qui
+
+
+<h3><u>2.2- Entendendo a implementação</u></h2>
