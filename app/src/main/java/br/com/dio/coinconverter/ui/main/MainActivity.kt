@@ -25,23 +25,46 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity() {
 
+    //----------------------------------------------------------------------------------------------
+    // Instancializações e inicializações
+    //----------------------------------------------------------------------------------------------
     private val viewModel by viewModel<MainViewModel>()
+
     private val dialog    by lazy { createProgressDialog() }
     private val binding   by lazy { ActivityMainBinding.inflate(layoutInflater) }
 
+    companion object {
+
+        const val cTAG = "DIO-CoinConverter"
+
+    }
+
+    //---------------------------------------------------------------------------------------------
+    // Eventos
+    //---------------------------------------------------------------------------------------------
+    //--- onCreate
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
+        //---------------
         bindAdapters()
+        //----------------
         bindListeners()
+        //----------------
         bindObserve()
+        //---------------
+
+        //------------
+        listeners()
+        //------------
 
         setSupportActionBar(binding.toolbar)
 
     }
 
+    //--- onCreateOptionsMenu
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
 
         menuInflater.inflate(R.menu.main_menu, menu)
@@ -49,6 +72,7 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    //--- onOptionsItemSelected
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
         if (item.itemId == R.id.action_history) {
@@ -61,6 +85,7 @@ class MainActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
+    //--- Adapters
     private fun bindAdapters() {
 
         val list    = Coin.values()
@@ -76,15 +101,25 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    //--- BindListeners
     private fun bindListeners() {
 
+        //- tilValueIn
         binding.tilValueIn.editText?.doAfterTextChanged {
 
             binding.btnConverter.isEnabled = it != null && it.toString().isNotEmpty()
             binding.btnSave.isEnabled = false
 
+            if (it == null || it.toString().isEmpty()) {
+
+                binding.tilFrom.editText?.setText("")
+                binding.tilTo.editText?.setText("")
+
+            }
+
         }
 
+        //- btnConverter
         binding.btnConverter.setOnClickListener {
 
             it.hideSoftKeyboard()
@@ -95,6 +130,7 @@ class MainActivity : AppCompatActivity() {
 
         }
 
+        //- btnSave
         binding.btnSave.setOnClickListener {
 
             val value = viewModel.state.value
@@ -104,6 +140,7 @@ class MainActivity : AppCompatActivity() {
 
             }
         }
+
     }
 
     private fun bindObserve() {

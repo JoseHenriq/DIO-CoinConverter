@@ -1,12 +1,15 @@
 package br.com.dio.coinconverter.ui.history
 
 import android.os.Bundle
+import android.util.Log
+import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
 import br.com.dio.coinconverter.core.extensions.createDialog
 import br.com.dio.coinconverter.core.extensions.createProgressDialog
 import br.com.dio.coinconverter.databinding.ActivityHistoryBinding
 import br.com.dio.coinconverter.presentation.HistoryViewModel
+import br.com.dio.coinconverter.ui.main.MainActivity.Companion.cTAG
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class HistoryActivity : AppCompatActivity() {
@@ -25,12 +28,49 @@ class HistoryActivity : AppCompatActivity() {
             DividerItemDecoration(this, DividerItemDecoration.HORIZONTAL)
         )
 
+        //--- Prepara o actionBar (toolBar)
+        //setting toolbar
         setSupportActionBar(binding.toolbar)
-        supportActionBar?.setDisplayShowHomeEnabled(true)
+        //home navigation
+        //supportActionBar?.setDisplayShowHomeEnabled(true)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         bindObserve()
 
         lifecycle.addObserver(viewModel)
+    }
+
+    //--- Navegação - Actions on click menu items
+    // https://github.com/EyeHunts/AndroidToolbarexample
+    override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
+
+        /* NÃO utilizada
+        R.id.action_print -> {
+            // User chose the "Print" item
+            Toast.makeText(this,"Print action", Toast.LENGTH_LONG).show()
+            true
+        }
+         */
+
+        android.R.id.home -> {
+
+            Log.d(cTAG, "   -- retorna à mainActivity")
+
+            //---------
+            finish()
+            //---------
+
+            true
+
+        }
+
+        else -> {
+            // If we got here, the user's action was not recognized.
+            // Invoke the superclass to handle it.
+            //----------------------------------
+            super.onOptionsItemSelected(item)
+            //----------------------------------
+        }
     }
 
     private fun bindObserve() {
