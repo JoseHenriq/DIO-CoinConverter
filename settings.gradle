@@ -1,2 +1,2 @@
-rootProject.name = "Coin Converter"
+rootProject.name = "DIO-CoinConverter"
 include ':app'

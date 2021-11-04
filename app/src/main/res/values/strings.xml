@@ -4,7 +4,7 @@
     <string name="converter_de"   >Converter de:</string>
     <string name="para"           >Para:</string>
     <string name="valor_moedafrom">Valor a Comprar</string>
-    <string name="valor_moedato"  >Valor a Pagar</string>
+    <string name="valor_resultado">Valor a Pagar</string>
     <string name="converter"      >Converter</string>
     <string name="salvar"         >Salvar</string>
 </resources>

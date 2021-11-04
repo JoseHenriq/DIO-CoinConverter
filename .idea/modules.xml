@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Coin_Converter.iml" filepath="$PROJECT_DIR$/.idea/modules/Coin_Converter.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/Coin_Converter.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/Coin_Converter.app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/DIO-CoinConverter.iml" filepath="$PROJECT_DIR$/.idea/modules/DIO-CoinConverter.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/DIO-CoinConverter.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/DIO-CoinConverter.app.iml" />
     </modules>
   </component>
 </project>
