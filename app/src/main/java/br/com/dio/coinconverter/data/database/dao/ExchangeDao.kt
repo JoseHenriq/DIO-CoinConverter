@@ -15,4 +15,5 @@ interface ExchangeDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun save(entity: ExchangeResponseValue)
+
 }

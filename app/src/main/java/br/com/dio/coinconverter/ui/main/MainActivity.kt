@@ -129,10 +129,8 @@ class MainActivity : AppCompatActivity() {
         //- tilFrom
         binding.tilFrom.editText?.doAfterTextChanged {
 
-            //binding.tilValueIn.text = ""
             binding.tvResult.text = ""
 
-            //binding.btnConverter.isEnabled = false
             binding.btnSave.isEnabled      = false
 
             binding.tilValueIn.hint = "Comprar ${binding.tilFrom.text}"
@@ -142,10 +140,8 @@ class MainActivity : AppCompatActivity() {
         //- tilTo
         binding.tilTo.editText?.doAfterTextChanged {
 
-            //binding.tilValueIn.text = ""
             binding.tvResult.text   = ""
 
-            //binding.btnConverter.isEnabled = false
             binding.btnSave.isEnabled      = false
 
             binding.tvResult.hint = "Pagar em ${binding.tilTo.text}"
@@ -169,7 +165,9 @@ class MainActivity : AppCompatActivity() {
         binding.btnSave.setOnClickListener {
 
             val value = viewModel.state.value
+
             (value as? MainViewModel.State.Success)?.let {
+
                 val exchange = it.exchange.copy(bid = it.exchange.bid * binding.tilValueIn.text.toDouble())
 
                 //-----------------------------------
@@ -231,7 +229,9 @@ class MainActivity : AppCompatActivity() {
         val selectedCoin = binding.tilTo.text
         val coin = Coin.getByName(selectedCoin)
 
-        val result = it.exchange.bid * binding.tilValueIn.text.toDouble()
+        val cotacao = it.exchange.bid
+
+        val result = cotacao * binding.tilValueIn.text.toDouble()
         binding.tvResult.text = result.formatCurrency(coin.locale)
 
     }

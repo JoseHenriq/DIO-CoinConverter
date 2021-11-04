@@ -13,12 +13,17 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun exchangeDao(): ExchangeDao
 
     companion object {
+
         fun getInstance(context: Context): AppDatabase {
+
             return Room.databaseBuilder(
                 context.applicationContext,
                 AppDatabase::class.java,
                 "exchange_app_db"
             ).build()
+
         }
+
     }
+
 }

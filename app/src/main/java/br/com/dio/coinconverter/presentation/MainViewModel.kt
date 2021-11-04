@@ -15,15 +15,18 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 
 class MainViewModel(
+
     private val saveExchangeUseCase: SaveExchangeUseCase,
-    private val getExchangeValueUseCase: GetExchangeValueUseCase
-) : ViewModel() {
+    private val getExchangeValueUseCase: GetExchangeValueUseCase ) : ViewModel() {
 
     private val _state = MutableLiveData<State>()
     val state: LiveData<State> = _state
 
+    //--- getExchangeValue
     fun getExchangeValue(coins: String) {
+
         viewModelScope.launch {
+
             getExchangeValueUseCase(coins)
                 .flowOn(Dispatchers.Main)
                 .onStart {
@@ -35,12 +38,17 @@ class MainViewModel(
                 .collect {
                     _state.value = State.Success(it)
                 }
+
         }
     }
 
+    //--- saveExchange
     fun saveExchange(exchange: ExchangeResponseValue) {
+
         viewModelScope.launch {
+
             saveExchangeUseCase(exchange)
+
                 .flowOn(Dispatchers.Main)
                 .onStart {
                     _state.value = State.Loading
@@ -54,11 +62,15 @@ class MainViewModel(
         }
     }
 
+    //--- Classe State
     sealed class State {
+
         object Loading: State()
         object Saved: State()
 
         data class Success(val exchange: ExchangeResponseValue): State()
         data class Error(val error: Throwable): State()
+
     }
+
 }

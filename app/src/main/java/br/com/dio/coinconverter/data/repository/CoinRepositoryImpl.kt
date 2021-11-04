@@ -13,19 +13,26 @@ import retrofit2.HttpException
 class CoinRepositoryImpl(
     appDatabase: AppDatabase,
     private val service: AwesomeService
-) : CoinRepository {
+    ) : CoinRepository {
 
     private val dao = appDatabase.exchangeDao()
 
     override suspend fun getExchangeValue(coins: String) = flow {
+
         try {
+
             val exchangeValue = service.exchangeValue(coins)
-            val exchange = exchangeValue.values.first()
+            val exchange      = exchangeValue.values.first()
+            //---------------
             emit(exchange)
+            //---------------
+
         } catch (e: HttpException) {
+
             // {"status":404,"code":"CoinNotExists","message":"moeda nao encontrada USD-USD"}
-            val json = e.response()?.errorBody()?.string()
+            val json = e.response()?.errorBody()?.toString()
             val errorResponse = Gson().fromJson(json, ErrorResponse::class.java)
+
             throw RemoteException(errorResponse.message)
         }
     }
