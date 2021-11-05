@@ -97,14 +97,18 @@ class HistoryActivity : AppCompatActivity() {
                 HistoryViewModel.State.Loading -> dialog.show()
                 //------------------------------------------------
 
+                //-------------------------------------
                 is HistoryViewModel.State.Error -> {
+                //-------------------------------------
                     dialog.dismiss()
                     createDialog {
                         setMessage(it.error.message)
                     }.show()
                 }
 
+                //---------------------------------------
                 is HistoryViewModel.State.Success -> {
+                //---------------------------------------
                     dialog.dismiss()
                     adapter.submitList(it.list)
                 }

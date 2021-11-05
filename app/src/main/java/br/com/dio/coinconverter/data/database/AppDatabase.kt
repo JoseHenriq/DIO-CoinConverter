@@ -19,7 +19,7 @@ abstract class AppDatabase : RoomDatabase() {
             return Room.databaseBuilder(
                 context.applicationContext,
                 AppDatabase::class.java,
-                "exchange_app_db"
+                "exchange_1_db"   //"exchange_app_db"
             ).build()
 
         }

@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface ExchangeDao {
 
-    @Query("SELECT * FROM tb_exchange")
+    @Query("SELECT * FROM tb_exchange_1")
     fun findAll(): Flow<List<ExchangeResponseValue>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

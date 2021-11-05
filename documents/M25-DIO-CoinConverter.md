@@ -1,3 +1,5 @@
+
+
 <h1 style="text-align:center">Bootcamp Dio-Carrefour Android Developer</h1>
 
 início: 26/08/21 qui    Final: 09/02/22 qua                                               data1: 24/10/21 dom (adiada) 
@@ -240,5 +242,270 @@ import kotlinx.coroutines.flow.Flow
 
 04/11/21 qui
 
+<h3><u>2.2- Entendendo a implementação exemplo</u></h2>
 
-<h3><u>2.2- Entendendo a implementação</u></h2>
+
+
+
+05/11/21 sex
+
+<h4>2.2.1- Retrofit</h4>
+
+
+
+<h4>2.2.2- Koin</h4>
+
+
+
+<h4>2.2.3- Coroutine</h4>
+
+
+
+<h4>2.2.4- CycleView</h4>
+
+
+
+<h4>2.2.5- Room</h4>
+
+- declaração do database: \data\database\AppDataBase.kt
+
+  ```
+  package br.com.dio.coinconverter.data.database
+  
+  import android.content.Context
+  import androidx.room.Database
+  import androidx.room.Room
+  import androidx.room.RoomDatabase
+  import br.com.dio.coinconverter.data.database.dao.ExchangeDao
+  import br.com.dio.coinconverter.data.model.ExchangeResponseValue
+  
+  @Database(entities = [ExchangeResponseValue::class], version = 1)
+  abstract class AppDatabase : RoomDatabase() {
+  
+      abstract fun exchangeDao(): ExchangeDao
+  
+      companion object {
+  
+          fun getInstance(context: Context): AppDatabase {
+  
+              return Room.databaseBuilder(
+                  context.applicationContext,
+                  AppDatabase::class.java,
+                  "exchange_1_db"   //"exchange_app_db"
+              ).build()
+  
+          }
+  
+      }
+  
+  }
+  ```
+
+
+
+- declaração do datatable: \data\model\ExchangeRespost.kt
+
+```
+package br.com.dio.coinconverter.data.model
+
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+
+typealias ExchangeResponse = HashMap<String, ExchangeResponseValue>
+
+@Entity(tableName = "tb_exchange_1")      // "tb_exchange"
+data class ExchangeResponseValue(
+    @PrimaryKey(autoGenerate = true)
+    var id       : Long,
+    val dataHora : String,    // <---
+    val code     : String,
+    val codein   : String,
+    val name     : String,
+    val cotacao  : Double,    // <---
+    val bid      : Double
+)
+```
+
+
+
+- declaração das funções de acessos aos dados: \data\database\dao\ExchangeDao.kt
+
+```
+package br.com.dio.coinconverter.data.database.dao
+
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
+import br.com.dio.coinconverter.data.model.ExchangeResponseValue
+import kotlinx.coroutines.flow.Flow
+
+@Dao
+interface ExchangeDao {
+
+    @Query("SELECT * FROM tb_exchange")
+    fun findAll(): Flow<List<ExchangeResponseValue>>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun save(entity: ExchangeResponseValue)
+
+}
+```
+
+
+
+- declaração referentes ao RoomDataTable: app\java(generated)\
+
+  ​                                  br.com.dio.coinconverter.data.database\dao\exchangedao\ExchangeDao_Impl.java
+
+  - findAll():  public Flow<List<ExchangeResponseValue>> findAll() { ... }
+
+  - save()   :  public Object save(final ExchangeResponseValue entity, final Continuation<? super Unit> p1) { ... }
+
+    
+
+- utilização: 
+
+  - leitura dos dados: 
+
+    - \ui\MainActivity no listener do btnConverter: 
+
+          //- btnConverter
+          binding.btnConverter.setOnClickListener {
+          
+              it.hideSoftKeyboard()
+          
+              val search = "${binding.tilFrom.text}-${binding.tilTo.text}"
+              //-----------------------------------
+              viewModel.getExchangeValue(search)
+              //-----------------------------------
+          
+          }
+
+    -  \ui\HistoryActivity no método bindObserve() ao chamar viewModel.state.observe caso seja Success
+
+    
+
+    -<u>getExchangeValue()</u> - método da classe viewModel, obtém uma lista à partir da classe interna State ao chamar a data class Success, declarada em \presentation\HistoryViewModel.kt e em \presentation\MainViewModel.kt;
+
+  
+
+  - salvamento dos dados:
+
+    - \ui\MainActivity no listener do btnSave:
+
+      ```
+      //- btnSave
+      binding.btnSave.setOnClickListener {
+      
+          val value = viewModel.state.value
+          (value as? MainViewModel.State.Success)?.let {
+      
+              val exchange = it.exchange.copy(
+                  bid = it.exchange.bid * binding.tilValueIn.text.toDouble()
+              )
+      
+              //---------------------------------
+              viewModel.saveExchange(exchange)
+              //---------------------------------
+      
+          }
+      }
+      ```
+
+        -<u>saveExchangeValue()</u> - método da classe viewModel, chamada com o parâmetro it.exchange, que é a lista a ser salva.
+
+
+
+<h3><u>2.3- Adaptando a implementação exemplo para o projeto final do bootcamp</u></h2>
+
+
+
+<h4>2.3.1- layouts das activities</h4>
+
+- activity_main.xml
+
+![Screenshot_20211105-103712_DIO-CoinConverter](Imagens/Screenshot_20211105-103712_DIO-CoinConverter.jpg)
+
+
+
+- activity_history.xml + item_history.xml
+
+![Screenshot_20211105-145701_DIO-CoinConverter](Imagens/Screenshot_20211105-145701_DIO-CoinConverter.jpg)
+
+<h4>2.3.2- codificação</h4>
+
+- adaptação às mudanças no layout
+
+  - classe mainActivity
+
+  - classe historicActivity
+  - classe inner ViewHolder em ui\history\HistoryListAdapter.kt
+
+  
+
+- inclusão dos campos <i>dataHora</i> e <i>cotacao</i> na tabela
+
+  - novo database ver (ítem 2.2.5 acima);
+  - nova tabela com os campos adicionados (ítem 2.2.5 acima) e mudar o nome da tabela em:
+    - atualizar o nome da tabela em: <i>ExchangeDao.java</i> 
+
+
+
+- adaptar o código do listener btnSave:
+
+```
+//- btnSave
+binding.btnSave.setOnClickListener {
+
+    val value = viewModel.state.value
+    try {
+        (value as? MainViewModel.State.Success)?.let {
+
+            val exchange = it.exchange.copy(
+                cotacao = it.exchange.bid,
+                bid     = it.exchange.bid * binding.tilValueIn.text.toDouble(),
+                dataHora= "${utils.sysData("dd/MM/yy")} ${utils.sysHora("HH:mm:ss")}"
+            )
+
+            //---------------------------------
+            viewModel.saveExchange(exchange)
+            //---------------------------------
+
+        }
+    } catch (exc: Exception){
+
+        Log.d(cTAG, exc.message.toString())
+
+    }
+}
+```
+
+- adapter do recycler view ()
+
+```
+inner class ViewHolder( private val binding: ItemHistoryBinding ) :
+                                                        RecyclerView.ViewHolder(binding.root) {
+
+    fun bind(item: ExchangeResponseValue) {
+
+        val coin = Coin.getByName(item.codein)
+
+        val arNameOfCoin = arrayOf(item.name.split("/"))
+        try {
+            binding.tvNomesMoedas.text = "${arNameOfCoin[0][1]}/${arNameOfCoin[0][0]}" //item.name
+        }
+        catch (exc : Exception) {
+
+            Log.d(cTAG, "Erro: ${exc.message.toString()}")
+            binding.tvNomesMoedas.text  = " "
+
+        }
+        binding.tvCotacao.text  = item.cotacao.formatCurrency(coin.locale)
+
+        binding.tvDateHora.text = "Compra: ${item.dataHora}"
+        binding.tvValue.text = item.bid.formatCurrency(coin.locale)
+
+    }
+}
+```

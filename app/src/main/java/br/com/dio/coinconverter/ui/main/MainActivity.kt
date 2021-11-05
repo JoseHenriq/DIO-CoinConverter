@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 
 import android.content.Intent
 import android.os.Build
+import android.util.Log
 
 import android.view.Menu
 import android.view.MenuItem
@@ -13,6 +14,7 @@ import androidx.annotation.RequiresApi
 import androidx.core.widget.doAfterTextChanged
 
 import br.com.dio.coinconverter.R
+import br.com.dio.coinconverter.Utils
 import br.com.dio.coinconverter.core.extensions.createDialog
 import br.com.dio.coinconverter.core.extensions.createProgressDialog
 import br.com.dio.coinconverter.core.extensions.formatCurrency
@@ -35,6 +37,8 @@ class MainActivity : AppCompatActivity() {
     private val dialog    by lazy { createProgressDialog() }
     private val binding   by lazy { ActivityMainBinding.inflate(layoutInflater) }
 
+    private var utils = Utils()
+
     companion object {
 
         const val cTAG = "DIO-CoinConverter"
@@ -54,14 +58,10 @@ class MainActivity : AppCompatActivity() {
         //---------------
         bindAdapters()
         //----------------
-        bindListeners()
+        listeners()
         //----------------
         bindObserve()
         //---------------
-
-        //------------
-        listeners()
-        //------------
 
         setSupportActionBar(binding.toolbar)
 
@@ -112,9 +112,31 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    //--- BindListeners
+    //--- Listeners
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun bindListeners() {
+    private fun listeners() {
+
+        //- tilFrom
+        binding.tilFrom.editText?.doAfterTextChanged {
+
+            binding.btnSave.isEnabled = false
+
+            binding.tilValueIn.hint = "Comprar ${binding.tilFrom.text}"
+
+            binding.tvResult.text = ""
+
+        }
+
+        //- tilTo
+        binding.tilTo.editText?.doAfterTextChanged {
+
+            binding.btnSave.isEnabled      = false
+
+            binding.tvResult.hint = "Pagar em ${binding.tilTo.text}"
+
+            binding.tvResult.text   = ""
+
+        }
 
         //- tilValueIn
         binding.tilValueIn.editText?.doAfterTextChanged {
@@ -126,35 +148,12 @@ class MainActivity : AppCompatActivity() {
 
         }
 
-        //- tilFrom
-        binding.tilFrom.editText?.doAfterTextChanged {
-
-            binding.tvResult.text = ""
-
-            binding.btnSave.isEnabled      = false
-
-            binding.tilValueIn.hint = "Comprar ${binding.tilFrom.text}"
-
-        }
-
-        //- tilTo
-        binding.tilTo.editText?.doAfterTextChanged {
-
-            binding.tvResult.text   = ""
-
-            binding.btnSave.isEnabled      = false
-
-            binding.tvResult.hint = "Pagar em ${binding.tilTo.text}"
-
-        }
-
         //- btnConverter
         binding.btnConverter.setOnClickListener {
 
             it.hideSoftKeyboard()
 
             val search = "${binding.tilFrom.text}-${binding.tilTo.text}"
-
             //-----------------------------------
             viewModel.getExchangeValue(search)
             //-----------------------------------
@@ -165,14 +164,26 @@ class MainActivity : AppCompatActivity() {
         binding.btnSave.setOnClickListener {
 
             val value = viewModel.state.value
+            try {
+                (value as? MainViewModel.State.Success)?.let {
 
-            (value as? MainViewModel.State.Success)?.let {
+                    val data = utils.sysData("dd/MM/yy")
+                    val hora = utils.sysHora("HH:mm:ss")
 
-                val exchange = it.exchange.copy(bid = it.exchange.bid * binding.tilValueIn.text.toDouble())
+                    val exchange = it.exchange.copy(
+                        cotacao = it.exchange.bid,
+                        bid     = it.exchange.bid * binding.tilValueIn.text.toDouble(),
+                        dataHora= "$data $hora"
+                    )
 
-                //-----------------------------------
-                viewModel.saveExchange(exchange)
-                //-----------------------------------
+                    //---------------------------------
+                    viewModel.saveExchange(exchange)
+                    //---------------------------------
+
+                }
+            } catch (exc: Exception){
+
+                Log.d(cTAG, exc.message.toString())
 
             }
         }
@@ -217,10 +228,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    //--- Listeners
-    private fun listeners() { }
-
-    //--- Sucesso
+    //--- Sucesso (chamado por bindObserve() it = MainViewModel.State.Success)
     private fun success(it: MainViewModel.State.Success) {
 
         dialog.dismiss()
